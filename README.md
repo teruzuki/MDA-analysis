@@ -1,6 +1,7 @@
 # MDA-analysis
-Minimal distance analysis for mitochondrial genome analysis in JAVA 
-Command line aplication for MDA analysis
+Minimal distance analysis for mitochondrial genome analysis in JAVA</br>
+Command line aplication for MDA analysis </br>
+```
 Sample output:
 Please input the textfile for listed deletion break points here:
 5pBP.txt
@@ -30,3 +31,4 @@ Input your read window here
 200
 Minimal distance average at position 0 is 78.25581395348837
 your p-value is 0.7108433734939759
+```
