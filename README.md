@@ -1,8 +1,15 @@
 # MDA-analysis
 Minimal distance analysis for mitochondrial genome analysis in JAVA</br>
 Command line aplication for MDA analysis </br>
+File used for analysis: </br>
 ```
-Sample output:
+5pBP.txt: 5' breakpoints
+3G33Nshuman: Output of midpoints from Dong script 3G33N- 
+2G33N-human: Output of midpoints from Dong script 2G33N- 
+G4hunter: Output of midpoints from G4Hunter by Joao with 3G33N (from email)
+```
+Sample output:</br>
+```
 Please input the textfile for listed deletion break points here:
 5pBP.txt
 Please input the textfile for listed QFP midpoints here:
