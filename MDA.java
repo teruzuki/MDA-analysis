@@ -40,7 +40,7 @@ public class MDA{
 		nameBP = sc.nextLine();
 		System.out.println("Please input the textfile for listed QFP midpoints here:");
 		nameMP = sc.nextLine();
-		System.out.println("Input your read window here");
+		System.out.println("Input your deletion frame shift here");
 		readWindows = sc.nextLine();
 		readWindow = Integer.parseInt(readWindows);
 		
