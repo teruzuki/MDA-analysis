@@ -1,4 +1,4 @@
-//mda.java
+//mda.java//mda.java
 /*
 For evaluating the minimal distance of motif - breakpoint.
 This program will take listed result (txt) for mtDNA QFP position and deletion breakpoint
@@ -30,20 +30,24 @@ public class MDA1{
 		String nameBP = "";
 		String nameMP = "";
 		String readWindows = "";
-		int readWindow = 0;
-		System.out.println("Please input the textfile for listed deletion break points here:");
+		//int readWindow = 1;
+		System.out.println("Please select the textfile for listed deletion break points here:");
+		//System.out.println("1. 5 prime breakpoint");
+		//System.out.println("2. 3 prime breakpoint");
 		nameBP = sc.nextLine();
 		System.out.println("Please input the textfile for listed QFP midpoints here:");
 		nameMP = sc.nextLine();
-		System.out.println("Input your deletion frame shift here");
-		readWindows = sc.nextLine();
-		readWindow = Integer.parseInt(readWindows);
+		/*System.out.println("Input your deletion frame shift here");
+		readWindows = sc.nextLine();*/
+		//readWindow = 1;//Integer.parseInt(readWindows);
 		
+		ArrayList<Double> myBP = importBP(nameBP);
+		ArrayList<Double> myMP = importMP(nameMP);
 
 		double frequency = 0.0;
 		double numOfLarge = 0.0;
 		double numOfSmall = 0.0;
-		double initialAverage = getAve(0, nameMP, nameBP);
+		double initialAverage = getAve(0, myMP, myBP);
 		System.out.println("Minimal distance average at position 0 is " + initialAverage);
 
 		//Scanner sc = new Scanner(System.in);
@@ -54,23 +58,21 @@ public class MDA1{
 		ArrayList<Double> collectionForPValue = new ArrayList<Double>();
 		ArrayList<Double> antiCollectionForPValue = new ArrayList<Double>();
 
-		for(int i = 1; i < 16567; i+=readWindow){
+		for(int i = 1; i < 16569; i+=1){
 			double myAverage = 0.0;
-			myAverage = getAve(i,nameMP, nameBP);
-			if (initialAverage >= myAverage){
+			myAverage = getAve(i,myMP, myBP);
+			if (initialAverage > myAverage){
 				collectionForPValue.add(myAverage);
-			}else{
-				antiCollectionForPValue.add(myAverage);
 			}
 			//System.out.println(myAverage);
 		}
 		//System.out.println(collectionForPValue);
 		
 		numOfSmall = collectionForPValue.size();
-		numOfLarge = antiCollectionForPValue.size();
+		//numOfLarge = antiCollectionForPValue.size();
 
 
-		frequency = numOfSmall/(numOfSmall+numOfLarge);
+		frequency = numOfSmall/16569;
 		
 
 		System.out.println("your p-value is " + frequency);
@@ -99,10 +101,10 @@ public class MDA1{
 	  The method would then sum all element of the arraylist and therefore calculate and return the average
 	  distance of all midpoint at one position.
 	*/
-	public static double getAve(int pos, String nameMP, String nameBP)throws FileNotFoundException{
+	public static double getAve(int pos, ArrayList<Double> myMP, ArrayList<Double> myBP)throws FileNotFoundException{
 
-		ArrayList<Double> myBP = importBP(nameBP);
-		ArrayList<Double> myMP = importMP(nameMP);
+		//ArrayList<Double> myBP = importBP(nameBP);
+		//ArrayList<Double> myMP = importMP(nameMP);
 		double position = (double) pos;
 
 		ArrayList<Double> minimalDistance = new ArrayList<Double>();
@@ -111,17 +113,33 @@ public class MDA1{
 			double currentMP = myMP.get(i);
 			ArrayList<Double> findSmall = new ArrayList<Double>();
 			for (int j = 0; j<myBP.size(); j++){
-				double currentBP = myBP.get(j);
+				double currentBP = myBP.get(j) + pos;
 				double difference = 0.0;
 				double absDifference = 0.0;
-				if ((currentBP + position) < 16567){
-					difference = currentMP - currentBP - position;
-					absDifference = Math.abs(difference);
-					findSmall.add(absDifference);
+				if (currentBP < 16569){
+					//difference = currentMP - currentBP - position;
+					if(currentBP > (8284.5 + currentMP)){
+						difference = currentMP + (16569- currentBP);
+						absDifference = Math.abs(difference);
+						findSmall.add(absDifference);
+					}else{
+						difference = currentBP - currentMP;
+						absDifference = Math.abs(difference);
+						findSmall.add(absDifference);
+					}
 				}else{
-					difference = currentMP - (currentBP - 16567) - position;
-					absDifference = Math.abs(difference);
-					findSmall.add(absDifference);
+					//difference = currentMP - (currentBP - 16569) - position;
+					currentBP = currentBP-16569;
+					if(currentBP > (8284.5 + currentMP)){
+						difference = currentMP-(16569- currentBP);
+						absDifference = Math.abs(difference);
+						findSmall.add(absDifference);
+					}else{
+						difference = currentBP - currentMP;
+						absDifference = Math.abs(difference);
+						findSmall.add(absDifference);
+					}
+					
 				}
 			}
 			double smallNum = Collections.min(findSmall);
